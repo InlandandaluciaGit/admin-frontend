@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+/* Short viewports (e.g. laptops with browser chrome): tighten vertical spacing. */
+@custom-variant short (@media (max-height: 760px));
+
+/*
+ * Inland Admin design tokens.
+ * Brand colours are derived from the public Inland website
+ * (primary #2F3194, logo navy #2F3652, logo orange #F5702F).
+ * Use the semantic tokens (canvas, surface, fg, border, …) in components
+ * rather than raw palette values so the theme can evolve in one place.
+ */
+@theme {
+  /* Brand */
+  --color-brand-50: #f2f3fb;
+  --color-brand-100: #e3e4f6;
+  --color-brand-200: #c8caed;
+  --color-brand-300: #a2a4df;
+  --color-brand-400: #7477cb;
+  --color-brand-500: #4f52b6;
+  --color-brand-600: #2f3194;
+  --color-brand-700: #27287a;
+  --color-brand-800: #21236c;
+  --color-brand-900: #1c1d55;
+  --color-brand-950: #14154a;
+  --color-accent-50: #fff4ed;
+  --color-accent-100: #ffe5d4;
+  --color-accent-500: #f5702f;
+  --color-accent-600: #e0581a;
+
+  /* Surfaces and text */
+  --color-canvas: #f5f6fa;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f1f3f6;
+  --color-border: #e6e8ef;
+  --color-border-strong: #cdd2da;
+  --color-fg: #161a23;
+  --color-fg-muted: #535b6b;
+  --color-fg-subtle: #8a92a1;
+
+  /*
+   * Data visualisation. Categorical order validated with the dataviz palette
+   * validator (light surface): passes lightness, chroma, CVD and normal-vision
+   * checks. Orange is < 3:1 on white, so its values are always printed or
+   * available in a table view.
+   */
+  --color-chart-1: #4f52b6;
+  --color-chart-2: #f5702f;
+  --color-chart-3: #00a389;
+  --color-chart-muted: #b4b9c7;
+  --color-chart-grid: #eceef4;
+  /* Sequential (one hue, light → dark) for magnitude, e.g. the location map. */
+  --color-seq-1: #e3e4f6;
+  --color-seq-2: #a2a4df;
+  --color-seq-3: #7477cb;
+  --color-seq-4: #4f52b6;
+  --color-seq-5: #2f3194;
+
+  /* Status */
+  --color-danger-50: #fdf2f2;
+  --color-danger-200: #f6caca;
+  --color-danger-600: #c62828;
+  --color-danger-700: #a51f1f;
+  --color-success-50: #eff8f2;
+  --color-success-600: #1e7a46;
+  --color-success-700: #17633a;
+  --color-warning-50: #fdf7ea;
+  --color-warning-200: #f2dfae;
+  --color-warning-700: #8a5a00;
+
+  /* Typography */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* Layout */
+  --spacing-sidebar: 16rem;
+  --spacing-sidebar-collapsed: 4.5rem;
+  --spacing-header: 4rem;
+
+  --shadow-card: 0 1px 2px 0 rgb(20 21 74 / 0.04), 0 2px 8px -2px rgb(20 21 74 / 0.06);
+  --shadow-card-hover: 0 2px 4px 0 rgb(20 21 74 / 0.05), 0 12px 24px -8px rgb(20 21 74 / 0.12);
+  --shadow-popover: 0 8px 24px -4px rgb(16 24 40 / 0.12), 0 2px 6px -2px rgb(16 24 40 / 0.06);
+}
+
+/*
+ * Auth screens (login etc.) use the approved login palette. Brand colours
+ * are inherited from the global tokens so actions use #2F3194 everywhere.
+ * Utilities read these variables, so shared components re-theme inside
+ * `.theme-auth` without affecting the dashboard.
+ */
+.theme-auth {
+  --color-canvas: #f3f3fc;
+  --color-fg: #15152e;
+  --color-fg-muted: #72758e;
+  --color-fg-subtle: #9a9db3;
+  --color-border: #e9eaf5;
+  --color-border-strong: #dfe1f0;
+  --color-surface-muted: #f5f5fb;
+  --shadow-card: 0 1px 2px 0 rgb(21 21 46 / 0.03), 0 12px 40px -12px rgb(47 49 148 / 0.14);
+}
+
+/*
+ * Keep browser-autofilled fields white on auth screens. Chrome's autofill
+ * background can't be overridden directly, so it is painted over with an
+ * inset shadow. While focused, the inset is passed through Tailwind's
+ * `--tw-inset-shadow` so it combines with the focus ring instead of replacing it.
+ */
+.theme-auth input:-webkit-autofill,
+.theme-auth input:autofill {
+  --tw-inset-shadow: inset 0 0 0 1000px var(--color-surface);
+  -webkit-text-fill-color: var(--color-fg);
+  caret-color: var(--color-fg);
+}
+
+.theme-auth input:-webkit-autofill:not(:focus),
+.theme-auth input:autofill:not(:focus) {
+  box-shadow: inset 0 0 0 1000px var(--color-surface);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-600);
+    outline-offset: 2px;
+  }
+}
